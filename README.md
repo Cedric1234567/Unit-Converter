@@ -10,20 +10,21 @@ Temperature: Celsius ⇄ Fahrenheit
 Area: Square Meters ⇄ Square Feet
 
 3. Interactive UI
-Dropdown for conversion type: id="conversion-type"
-Unit selection dropdowns: id="lhs-unit", id="rhs-unit"
-Input fields for real-time conversion: id="lhs-input", id="rhs-input"
+Dropdown for conversion type
+Unit selection dropdowns
+Input fields for real-time conversion
 Dynamic updates: Input in one field automatically updates the other.
+DarkMode button
 
-4. State Management & Interactivity
-React State (useState) manages dark mode and user input.
+5. State Management & Interactivity
+React State (useState,setState) manages dark mode and user input.
 Controlled components ensure instant recalculations and updates.
 Automatic clearing when conversion type changes.
 
-5. Dark Mode Support
+6. Dark Mode Support
 Toggle button to switch themes.
 State-based styling.
 Tech Stack
 Frontend: React.js (JSX), HTML, CSS
-State Management: React useState, prevState
+State Management: React useState, prevState, setState
 Rendering: ReactDOM
