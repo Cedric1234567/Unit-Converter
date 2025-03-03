@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unit Converter</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+      h1 {
+        color: rgb(56, 199, 255);
+        text-align: center;
+        margin-bottom: 5rem;
+        font-size: 80px;
+        transition: color 0.5s;
+      }
+
+      body {
+        background-color: #7a7a7a;
+        font-family: 'Inter', serif;
+        transition: background-color 0.5s, color 0.5s;
+        margin: 0;
+        padding: 0;
+      }
+
+      .darkmode {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        margin-bottom: -3rem;
+        padding: 1rem;
+      }
+
+      .main {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        padding: 1rem;
+      }
+
+      h2 {
+        margin: 0 3rem;
+        font-size: 45px;
+        color: rgb(56, 199, 255);
+      }
+
+      .conversion-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 2rem;
+      }
+
+      .conversion-type {
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+      }
+
+      input {
+        width: 300px;  /* Adjust size as needed */
+        height: 300px;
+        border-radius: 50%;
+        border: 2px solid rgb(56, 199, 255); /* Optional: Add a border */
+        text-align: center; /* Center text */
+        outline: none; /* Remove outline */
+        font-size: 24px;
+        background-color: rgb(56, 199, 255);
+        transition: background-color 0.5s, color 0.5s;
+        margin: 1rem;
+      }
+
+      select {
+        border-radius: 20px;
+        padding: 10px;
+        margin: 1rem;
+        width: 180px;
+        height: 50px;
+        font-family: 'Inter', serif;
+      }
+
+      .theme-button {
+        padding: 10px 20px;
+        font-size: 16px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+
+      @media (max-width: 768px) {
+        h1 {
+          font-size: 50px;
+          margin-bottom: 3rem;
+        }
+
+        h2 {
+          font-size: 30px;
+          margin: 0 1rem;
+        }
+
+        input {
+          width: 200px;
+          height: 200px;
+          font-size: 18px;
+        }
+
+        select {
+          width: 150px;
+          height: 40px;
+        }
+
+        .theme-button {
+          font-size: 14px;
+          padding: 8px 16px;
+        }
+      }
+
+      @media (max-width: 480px) {
+        h1 {
+          font-size: 40px;
+          margin-bottom: 2rem;
+        }
+
+        h2 {
+          font-size: 24px;
+          margin: 0 0.5rem;
+        }
+
+        input {
+          width: 150px;
+          height: 150px;
+          font-size: 16px;
+        }
+
+        select {
+          width: 120px;
+          height: 35px;
+        }
+
+        .theme-button {
+          font-size: 12px;
+          padding: 6px 12px;
+        }
+      }
+
+      .dark-input {
+        background-color: white;
+        color: black;
+      }
+    </style>
+</head>
+
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+      
+      function Title(props) {
+        return <h1 className={props.className}>{props.text}</h1>;
+      }
+  
+      class Input extends React.Component {
+        render() {
+          return (
+            <label>
+              {this.props.label}
+              <input
+                type="text"
+                id={this.props.id}
+                value={this.props.value}
+                onChange={e => this.props.onChange(e.target.value)}
+                autoComplete="off"
+                className={this.props.className}
+              />
+            </label>
+          )
+        }
+      }
+  
+      class Converter extends React.Component {
+        constructor(props) {
+          super(props)
+          this.state = {
+            val1: "",
+            val2: "",
+            unit1: 'Celsius',
+            unit2: 'Fahrenheit',
+            conversiontype: 'Temperature',
+            title: 'Temperature Converter',
+            darkMode: false
+          }
+        }
+  
+        handleChange = isval1 => value => {
+          if(this.state.conversiontype=== 'Temperature'){
+            if (isval1) {
+              if(this.state.unit1 === 'Celsius'){
+                this.setState({val1: value, val2: (value *9/5 + 32).toFixed(2)})
+              } else{
+                this.setState({val1: value, val2: ((value - 32) * 5 / 9).toFixed(2)})
+              }
+            } else {
+              if(this.state.unit2 === 'Fahrenheit'){
+                this.setState({val2: value, val1: ((value - 32) * 5 / 9).toFixed(2)})
+              } else{
+                this.setState({val2: value, val1: (value *9/5 + 32).toFixed(2)})
+              }
+            }
+          } else if (this.state.conversiontype === 'Length'){
+            if (isval1) {
+              if(this.state.unit1 === 'Meters'){
+                this.setState({val1: value, val2: (value * 3.28084).toFixed(2)})
+              } else{
+                this.setState({val1: value, val2: (value/ 3.28084).toFixed(2)})
+              }
+            } else {
+              if(this.state.unit2 === 'Feet'){
+                this.setState({val2: value, val1: (value/3.28084).toFixed(2) })
+              } else{
+                this.setState({val2: value, val1: (value * 3.28084).toFixed(2)})
+              }
+            }
+          } else if (this.state.conversiontype === 'Weight'){
+            if (isval1) {
+              if(this.state.unit1 === 'Kilograms'){
+                this.setState({val1: value, val2: (value * 2.20462).toFixed(2)})
+              } else{
+                this.setState({val1: value, val2: (value/ 2.20462).toFixed(2)})
+              }
+            } else {
+              if(this.state.unit2 === 'Pounds'){
+                this.setState({val2: value, val1: (value/2.20462).toFixed(2) })
+              } else{
+                this.setState({val2: value, val1: (value * 2.20462).toFixed(2)})
+              }
+            }
+          } else if (this.state.conversiontype === 'Area'){
+            if (isval1) {
+              if(this.state.unit1 === 'Square Meters'){
+                this.setState({val1: value, val2: (value * 10.7639).toFixed(2)})
+              } else{
+                this.setState({val1: value, val2: (value/ 10.7639).toFixed(2)})
+              }
+            } else {
+              if(this.state.unit2 === 'Square Feet'){
+                this.setState({val2: value, val1: (value/10.7639).toFixed(2) })
+              } else{
+                this.setState({val2: value, val1: (value * 10.7639).toFixed(2)})
+              }
+            }
+          }
+        }
+  
+        handleUnitChange = (unit, isFirst) => {
+          if(this.state.conversiontype === 'Temperature'){
+            if (isFirst) {
+                // When changing the first dropdown
+                this.setState(prevState => ({
+                    unit1: unit,
+                    unit2: unit === 'Celsius' ? 'Fahrenheit' : 'Celsius',
+                    val1: prevState.val2, // Swap the values
+                    val2: prevState.val1
+                }));
+            } else {
+                // When changing the second dropdown
+                this.setState(prevState => ({
+                    unit2: unit,
+                    unit1: unit === 'Celsius' ? 'Fahrenheit' : 'Celsius',
+                    val1: prevState.val2, // Swap the values
+                    val2: prevState.val1
+                }));
+            }
+          } else if (this.state.conversiontype === 'Length'){
+            if (isFirst) {
+                // When changing the first dropdown
+                this.setState(prevState => ({
+                    unit1: unit,
+                    unit2: unit === 'Meters' ? 'Feet' : 'Meters',
+                    val1: prevState.val2, // Swap the values
+                    val2: prevState.val1
+                }));
+            } else {
+                // When changing the second dropdown
+                this.setState(prevState => ({
+                    unit2: unit,
+                    unit1: unit === 'Meters' ? 'Feet' : 'Meters',
+                    val1: prevState.val2, // Swap the values
+                    val2: prevState.val1
+                }));
+            }
+          } else if (this.state.conversiontype === 'Weight'){
+            if (isFirst) {
+                // When changing the first dropdown
+                this.setState(prevState => ({
+                    unit1: unit,
+                    unit2: unit === 'Kilograms' ? 'Pounds' : 'Kilograms',
+                    val1: prevState.val2, // Swap the values
+                    val2: prevState.val1
+                }));
+            } else {
+                // When changing the second dropdown
+                this.setState(prevState => ({
+                    unit2: unit,
+                    unit1: unit === 'Kilograms' ? 'Pounds' : 'Kilograms',
+                    val1: prevState.val2, // Swap the values
+                    val2: prevState.val1
+                }));
+            }
+          } else if (this.state.conversiontype === 'Area'){
+            if (isFirst) {
+                // When changing the first dropdown
+                this.setState(prevState => ({
+                    unit1: unit,
+                    unit2: unit === 'Square Meters' ? 'Square Feet' : 'Square Meters',
+                    val1: prevState.val2, // Swap the values
+                    val2: prevState.val1
+                }));
+            } else {
+                // When changing the second dropdown
+                this.setState(prevState => ({
+                    unit2: unit,
+                    unit1: unit === 'Square Meters' ? 'Square Feet' : 'Square Meters',
+                    val1: prevState.val2, // Swap the values
+                    val2: prevState.val1
+                }));
+            }
+          }
+        };
+
+        convert = (type) => {
+          if(type === 'Temperature'){
+            this.setState({conversiontype: type, unit1: 'Celsius', unit2: 'Fahrenheit', val1: "", val2: "", title: 'Temperature Converter'})
+          } else if(type === 'Length'){
+            this.setState({conversiontype: type, unit1: 'Meters', unit2: 'Feet', val1: 0, val2: 0, title: 'Length Converter'})
+          } else if(type ==='Weight'){
+            this.setState({conversiontype: type, unit1: 'Kilograms', unit2: 'Pounds', val1: 0, val2: 0, title: 'Weight Converter'})
+          } else if (type === 'Area'){
+            this.setState({conversiontype: type, unit1: 'Square Meters', unit2: 'Square Feet', val1: 0, val2: 0, title: 'Area Converter'})
+          }
+        }
+
+        toggleTheme = () => {
+          this.setState(prevState => ({
+            darkMode: !prevState.darkMode
+          }), () => {
+            const body = document.body;
+            const title = document.querySelector('h1');
+            if (this.state.darkMode) {
+              body.style.backgroundColor = 'black';
+              body.style.color = 'white';
+              title.style.color = 'white';
+            } else {
+              body.style.backgroundColor = '#7a7a7a';
+              body.style.color = 'black';
+              title.style.color = 'rgb(56, 199, 255)';
+            }
+          });
+        }
+  
+        render() {
+          const inputClass = this.state.darkMode ? 'dark-input' : '';
+          return (
+            <>
+              <div className="darkmode">
+              <button className="theme-button" onClick={this.toggleTheme}><i className="fa-solid fa-moon"></i></button>
+              </div>
+              <Title text={this.state.title} />
+              
+              <div className='main'>
+                <label>
+                  <select
+                    id="lhs-unit"
+                    value={this.state.unit1}
+                    onChange={e => this.handleUnitChange(e.target.value, true)}
+                  >
+                    <option value={this.state.unit1}>{this.state.unit1}</option>
+                    <option value={this.state.unit2}>{this.state.unit2}</option>
+                  </select>
+                  <Input id="lhs-input"
+                    value={this.state.val1}
+                    onChange={this.handleChange(true)}
+                    className={inputClass}
+                  />
+                </label>
+                <h2>=</h2>
+                <label>
+                  <Input id="rhs-input"
+                    value={this.state.val2}
+                    onChange={this.handleChange(false)}
+                    className={inputClass}
+                  />
+                  <select id="rhs-unit"
+                    value={this.state.unit2}
+                    onChange={e => this.handleUnitChange(e.target.value, false)}
+                  >
+                    <option value={this.state.unit1}>{this.state.unit1}</option>
+                    <option value={this.state.unit2}>{this.state.unit2}</option>
+                  </select>
+                </label>
+              </div>
+              <div className='conversion-container'>
+                <select id="conversion-type"
+                  value={this.state.conversiontype}
+                  onChange={e => this.convert(e.target.value)}
+                >
+                  <option value="Length">Length</option>
+                  <option value="Weight">Weight</option>
+                  <option value="Temperature">Temperature</option>
+                  <option value="Area">Area</option>
+                </select>
+              </div>
+            </>
+          )
+        }
+      }
+  
+      ReactDOM.render(<Converter />, document.getElementById('root'));
+  
+    </script>
+</body>
+</html>
